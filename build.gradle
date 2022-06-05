@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+}
+
+mainClassName = 'com.panda.Bot'
+version '1.0'
+sourceCompatibility = 1.17
+
+repositories {
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
+    maven {
+        name 'jitpack'
+        url 'https://jitpack.io'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'net.dv8tion:JDA:5.0.0-alpha.12'
+    implementation 'com.github.minndevelopment:emoji-java:master-SNAPSHOT'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+    implementation 'org.mongodb:mongodb-driver-sync:4.6.0'
+    implementation 'ch.qos.logback:logback-classic:1.2.11'
+}
+
+compileJava.options.encoding = 'UTF-8'
