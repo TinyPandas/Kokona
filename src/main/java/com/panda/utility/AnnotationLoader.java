@@ -23,16 +23,17 @@ public class AnnotationLoader {
         logger.info("Registering " + loaderClasses.size() + " loaders.");
         loaderClasses.forEach(loaderClass -> {
             LoaderAnnotation annotation = loaderClass.getAnnotation(LoaderAnnotation.class);
-            String packageName = annotation.path();
+            if (annotation.loader() != Loader.class) return;
+            String clazz = loaderClass.getName();
             Loader loader = null;
             try {
                 loader = (Loader) loaderClass.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                logger.warn("Failed to register loader for " + packageName);
+                logger.warn("Failed to register loader for " + clazz);
                 logger.warn(e.getMessage());
             }
-            loaders.put(packageName, loader);
-            logger.info("Registered loader for package: '" + packageName + "' as '" + loader + "'.");
+            loaders.put(clazz, loader);
+            logger.info("Registered loader: " + loader + ".");
         });
     }
 
@@ -49,10 +50,16 @@ public class AnnotationLoader {
 
             annotatedClasses.forEach(annotatedClass -> {
                 logger.info("Loading: " + annotatedClass);
-                String classPackage = annotatedClass.getPackageName();
-                Loader loader = loaders.get(classPackage);
+                LoaderAnnotation loaderAnnotation = annotatedClass.getAnnotation(LoaderAnnotation.class);
+                if (loaderAnnotation == null) {
+                    logger.warn("Class annotated with " + annotation + " does not have a defined loader.");
+                    return;
+                }
+
+                Class<? extends Loader> loaderDefinition = loaderAnnotation.loader();
+                Loader loader = loaders.get(loaderDefinition.getName());
                 if (loader == null) {
-                    logger.warn("Loader for '" + classPackage + "' was not defined.");
+                    logger.warn("Loader for '" + loaderDefinition + "' was not defined.");
                     return;
                 }
                 loader.registerClass(annotatedClass);

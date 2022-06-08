@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-@LoaderAnnotation(path = "com.panda.commands")
+@LoaderAnnotation()
 public class CommandLoader extends Loader {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandLoader.class.getName());
