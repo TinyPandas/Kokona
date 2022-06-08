@@ -5,6 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @RegisterOnStart
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ListenerAnnotation {
+public @interface Command {
     public String name() default "";
+    public String desc() default "";
 }

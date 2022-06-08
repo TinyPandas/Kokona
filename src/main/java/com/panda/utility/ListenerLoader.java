@@ -1,6 +1,6 @@
 package com.panda.utility;
 
-import com.panda.annotations.LoaderAnnotation;
+import com.panda.annotations.LoaderInfo;
 import com.panda.listeners.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-@LoaderAnnotation()
+@LoaderInfo(isLoader = true)
 public class ListenerLoader extends Loader {
 
-    private static final Logger logger = LoggerFactory.getLogger(CommandLoader.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(ListenerLoader.class.getName());
 
     private static final Map<String, Listener> loadedListeners = new HashMap<>();
 
@@ -19,13 +19,13 @@ public class ListenerLoader extends Loader {
         return loadedListeners;
     }
 
-    public <T> T registerClass(Class<T> commandClass) {
-        logger.info("Registering listener: " + commandClass);
+    public <T> T registerClass(Class<T> clazz) {
+        logger.info("Registering listener: " + clazz);
         try {
-            logger.info("Successfully registered listener: " + commandClass);
-            return commandClass.getDeclaredConstructor().newInstance();
+            logger.info("Successfully registered listener: " + clazz);
+            return clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            logger.warn("Failed to register listener: " + commandClass);
+            logger.warn("Failed to register listener: " + clazz);
             e.printStackTrace();
             return null;
         }

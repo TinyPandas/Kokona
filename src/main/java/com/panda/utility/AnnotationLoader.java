@@ -1,6 +1,6 @@
 package com.panda.utility;
 
-import com.panda.annotations.LoaderAnnotation;
+import com.panda.annotations.LoaderInfo;
 import com.panda.annotations.RegisterOnStart;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -12,32 +12,49 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * AnnotationLoader processes all Annotations at Runtime.
+ * Current Implementations: @RegisterOnStart
+ */
 public class AnnotationLoader {
 
-    private static final Logger logger = LoggerFactory.getLogger(AnnotationLoader.class.getName());
-    private static final Reflections reflections = new Reflections("com.panda");
-    private static final Map<String, Loader> loaders = new HashMap<>();
+    private final Logger logger = LoggerFactory.getLogger(AnnotationLoader.class.getName());
+    private final Reflections reflections;
+    private final Map<String, Loader> loaders = new HashMap<>();
 
-    static {
-        Set<Class<?>> loaderClasses = reflections.getTypesAnnotatedWith(LoaderAnnotation.class);
+    /**
+     * Constructs a new Instance of AnnotationLoader.
+     *
+     * This constructor also gathers all classes marked with `@LoaderInfo(isLoader = true)`.
+     * @param packageName - The top level package to reflect on.
+     */
+    public AnnotationLoader(String packageName) {
+        this.reflections = new Reflections(packageName);
+
+        Set<Class<?>> loaderClasses = reflections.getTypesAnnotatedWith(LoaderInfo.class);
         logger.info("Registering " + loaderClasses.size() + " loaders.");
         loaderClasses.forEach(loaderClass -> {
-            LoaderAnnotation annotation = loaderClass.getAnnotation(LoaderAnnotation.class);
-            if (annotation.loader() != Loader.class) return;
-            String clazz = loaderClass.getName();
-            Loader loader = null;
-            try {
-                loader = (Loader) loaderClass.getDeclaredConstructor().newInstance();
-            } catch (Exception e) {
-                logger.warn("Failed to register loader for " + clazz);
-                logger.warn(e.getMessage());
+            LoaderInfo annotation = loaderClass.getAnnotation(LoaderInfo.class);
+            if (annotation.isLoader()) {
+                String clazz = loaderClass.getName();
+                Loader loader = null;
+                try {
+                    loader = (Loader) loaderClass.getDeclaredConstructor().newInstance();
+                } catch (Exception e) {
+                    logger.warn("Failed to register loader for " + clazz);
+                    logger.warn(e.getMessage());
+                }
+                loaders.put(clazz, loader);
+                logger.info("Registered loader: " + loader + ".");
             }
-            loaders.put(clazz, loader);
-            logger.info("Registered loader: " + loader + ".");
         });
     }
 
-    public static void onStartRegister() {
+    /**
+     * Gathers all classes annotated with `@RegisterOnStart` and attempts to
+     * register them using their defined loader.
+     */
+    public void onStartRegister() {
         Set<Class<?>> onStartClasses = reflections.getTypesAnnotatedWith(RegisterOnStart.class).stream()
                 .filter(clazz -> clazz.getPackageName().contains("annotations"))
                 .collect(Collectors.toSet());
@@ -50,7 +67,7 @@ public class AnnotationLoader {
 
             annotatedClasses.forEach(annotatedClass -> {
                 logger.info("Loading: " + annotatedClass);
-                LoaderAnnotation loaderAnnotation = annotatedClass.getAnnotation(LoaderAnnotation.class);
+                LoaderInfo loaderAnnotation = annotatedClass.getAnnotation(LoaderInfo.class);
                 if (loaderAnnotation == null) {
                     logger.warn("Class annotated with " + annotation + " does not have a defined loader.");
                     return;

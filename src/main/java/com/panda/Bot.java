@@ -25,7 +25,8 @@ public class Bot {
         String botToken = Optional.ofNullable(System.getenv(EnvironmentVariables.TOKEN_PATH))
                         .orElseThrow(() -> new NullPointerException("No bot token provided / found."));
 
-        AnnotationLoader.onStartRegister();
+        AnnotationLoader annotationLoader = new AnnotationLoader("com.panda");
+        annotationLoader.onStartRegister();
 
         JDABuilder builder = JDABuilder.createDefault(botToken)
                 //Enable the bulk delete event.

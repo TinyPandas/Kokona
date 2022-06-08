@@ -1,12 +1,12 @@
 package com.panda.commands;
 
-import com.panda.annotations.CommandAnnotation;
-import com.panda.annotations.LoaderAnnotation;
+import com.panda.annotations.Command;
+import com.panda.annotations.LoaderInfo;
 import com.panda.utility.CommandLoader;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-@CommandAnnotation(name = "test", desc = "Some test command.")
-@LoaderAnnotation(loader = CommandLoader.class)
+@Command(name = "test", desc = "Some test command.")
+@LoaderInfo(loader = CommandLoader.class)
 public class TestCommand extends SlashCommand {
 
     public TestCommand(String name, String description) {
