@@ -1,9 +1,12 @@
 package com.panda.commands;
 
-import com.panda.annotations.CommandAnnotation;
+import com.panda.annotations.Command;
+import com.panda.utility.CommandLoader;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import org.tinypandas.annotations.LoaderInfo;
 
-@CommandAnnotation(name = "test", desc = "Some test command.")
+@Command(name = "test", desc = "Some test command.")
+@LoaderInfo(loader = CommandLoader.class)
 public class TestCommand extends SlashCommand {
 
     public TestCommand(String name, String description) {
