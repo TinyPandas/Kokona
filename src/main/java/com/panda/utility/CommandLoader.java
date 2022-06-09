@@ -1,10 +1,11 @@
 package com.panda.utility;
 
 import com.panda.annotations.Command;
-import com.panda.annotations.LoaderInfo;
 import com.panda.commands.SlashCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tinypandas.annotations.LoaderInfo;
+import org.tinypandas.utility.Loader;
 
 import java.util.HashMap;
 import java.util.Map;

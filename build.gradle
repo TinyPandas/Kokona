@@ -27,6 +27,7 @@ dependencies {
     implementation 'org.mongodb:mongodb-driver-sync:4.6.0'
     implementation 'ch.qos.logback:logback-classic:1.2.11'
     implementation 'org.reflections:reflections:0.10.2'
+    implementation 'com.github.TinyPandas:AnnotationLoader:master-SNAPSHOT'
 }
 
 compileJava.options.encoding = 'UTF-8'

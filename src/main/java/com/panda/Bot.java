@@ -2,7 +2,6 @@ package com.panda;
 
 import com.panda.commands.SlashCommand;
 import com.panda.constants.EnvironmentVariables;
-import com.panda.utility.AnnotationLoader;
 import com.panda.utility.CommandLoader;
 import com.panda.utility.ListenerLoader;
 import net.dv8tion.jda.api.JDA;
@@ -14,13 +13,13 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import org.tinypandas.AnnotationLoader;
 
 import javax.security.auth.login.LoginException;
 import java.util.List;
 import java.util.Optional;
 
 public class Bot {
-
     public static void main(String[] args) throws NullPointerException, LoginException, InterruptedException {
         String botToken = Optional.ofNullable(System.getenv(EnvironmentVariables.TOKEN_PATH))
                         .orElseThrow(() -> new NullPointerException("No bot token provided / found."));

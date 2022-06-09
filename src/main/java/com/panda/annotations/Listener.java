@@ -1,5 +1,7 @@
 package com.panda.annotations;
 
+import org.tinypandas.annotations.RegisterOnStart;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 

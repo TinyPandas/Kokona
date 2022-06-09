@@ -1,9 +1,9 @@
 package com.panda.commands;
 
 import com.panda.annotations.Command;
-import com.panda.annotations.LoaderInfo;
 import com.panda.utility.CommandLoader;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import org.tinypandas.annotations.LoaderInfo;
 
 @Command(name = "test", desc = "Some test command.")
 @LoaderInfo(loader = CommandLoader.class)
